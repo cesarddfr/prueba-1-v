@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Videos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f3f3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffe6e6;
+            border-radius: 15px;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #ff7f7f;
+        }
+        .video-list {
+            margin: 20px 0;
+        }
+        .video-item {
+            margin-bottom: 10px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+        }
+        button {
+            background-color: #ff7f7f;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff5050;
+        }
+        #admin-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Gestor de Videos</h2>
+        <div class="video-list" id="video-list"></div>
+        <div id="admin-section">
+            <input type="file" id="video-file" accept="video/mp4">
+            <button onclick="addVideo()">Añadir Video</button>
+        </div>
+        <div id="password-section">
+            <input type="password" id="password" placeholder="Introduce la contraseña de admin">
+            <button onclick="checkPassword()">Acceder como Admin</button>
+        </div>
+    </div>
+    <script>
+        const adminPassword = "1234"; // Cambia esta contraseña a algo más segura
+        const videos = [];
+
+        function renderVideos() {
+            const videoList = document.getElementById('video-list');
+            videoList.innerHTML = videos.map(video => `
+                <div class="video-item">
+                    <video controls width="100%">
+                        <source src="${video}" type="video/mp4">
+                        Tu navegador no soporta este formato de video.
+                    </video>
+                </div>
+            `).join('');
+        }
+
+        function addVideo() {
+            const videoInput = document.getElementById('video-file');
+            const file = videoInput.files[0];
+            if (file) {
+                const videoURL = URL.createObjectURL(file);
+                videos.push(videoURL);
+                renderVideos();
+                videoInput.value = '';
+            }
+        }
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            if (passwordInput === adminPassword) {
+                document.getElementById('admin-section').style.display = 'block';
+                document.getElementById('password-section').style.display = 'none';
+            } else {
+                alert('Contraseña incorrecta');
+            }
+        }
+    </script>
+</body>
+</html>
